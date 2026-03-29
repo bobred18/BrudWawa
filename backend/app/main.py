@@ -1,8 +1,8 @@
 from fastapi import FastAPI
 
-app = FastAPI()
+app = FastAPI(title="BrudWawa API")
 
 
 @app.get("/api/health")
-def health():
+async def health():
     return {"status": "ok"}
