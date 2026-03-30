@@ -37,6 +37,14 @@ def get_image_url(key: str) -> str:
     return client.presigned_get_object(settings.minio_bucket, key)
 
 
+def download_image(key: str) -> tuple[bytes, str]:
+    response = client.get_object(settings.minio_bucket, key)
+    data = response.read()
+    content_type = response.headers.get("Content-Type", "image/jpeg")
+    response.close()
+    return data, content_type
+
+
 def delete_image(key: str):
     try:
         client.remove_object(settings.minio_bucket, key)
