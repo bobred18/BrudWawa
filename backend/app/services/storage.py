@@ -1,0 +1,44 @@
+import uuid
+
+from minio import Minio
+from minio.error import S3Error
+
+from app.core.config import settings
+
+client = Minio(
+    settings.minio_endpoint,
+    access_key=settings.minio_root_user,
+    secret_key=settings.minio_root_password,
+    secure=False,
+)
+
+
+def ensure_bucket():
+    if not client.bucket_exists(settings.minio_bucket):
+        client.make_bucket(settings.minio_bucket)
+
+
+def upload_image(data: bytes, content_type: str) -> str:
+    ensure_bucket()
+    ext = content_type.split("/")[-1]
+    key = f"{uuid.uuid4()}.{ext}"
+    from io import BytesIO
+    client.put_object(
+        settings.minio_bucket,
+        key,
+        BytesIO(data),
+        length=len(data),
+        content_type=content_type,
+    )
+    return key
+
+
+def get_image_url(key: str) -> str:
+    return client.presigned_get_object(settings.minio_bucket, key)
+
+
+def delete_image(key: str):
+    try:
+        client.remove_object(settings.minio_bucket, key)
+    except S3Error:
+        pass
