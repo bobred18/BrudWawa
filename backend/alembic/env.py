@@ -27,8 +27,34 @@ def run_migrations_offline():
         context.run_migrations()
 
 
+POSTGIS_TABLES = {
+    "spatial_ref_sys", "topology", "layer",
+    "geocode_settings", "geocode_settings_default",
+    "pagc_gaz", "pagc_lex", "pagc_rules",
+    "loader_platform", "loader_lookuptables", "loader_variables",
+    "county", "county_lookup", "countysub_lookup", "cousub",
+    "place", "place_lookup", "state", "state_lookup",
+    "tabblock", "tabblock20", "tract", "zcta5",
+    "zip_lookup", "zip_lookup_all", "zip_lookup_base", "zip_state", "zip_state_loc",
+    "addr", "addrfeat", "bg", "edges", "faces", "featnames",
+    "direction_lookup", "secondary_unit_lookup", "street_type_lookup",
+}
+
+OUR_TABLES = {"users", "reports", "comments", "votes"}
+
+
+def include_object(obj, name, type_, reflected, compare_to):
+    if type_ == "table":
+        return name in OUR_TABLES
+    return True
+
+
 def do_run_migrations(connection):
-    context.configure(connection=connection, target_metadata=target_metadata)
+    context.configure(
+        connection=connection,
+        target_metadata=target_metadata,
+        include_object=include_object,
+    )
     with context.begin_transaction():
         context.run_migrations()
 

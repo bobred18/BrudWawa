@@ -26,7 +26,7 @@ class Report(Base):
     suggested_service: Mapped[str | None] = mapped_column(String(100))
     status: Mapped[ReportStatus] = mapped_column(Enum(ReportStatus), nullable=False, default=ReportStatus.pending)
     image_key: Mapped[str | None] = mapped_column(String(500))
-    location: Mapped[Geometry] = mapped_column(Geometry("POINT", srid=4326), nullable=False)
+    location: Mapped[Geometry] = mapped_column(Geometry("POINT", srid=4326, spatial_index=False), nullable=False)
     district: Mapped[str | None] = mapped_column(String(100))
     created_at: Mapped[DateTime] = mapped_column(DateTime(timezone=True), server_default=func.now())
     updated_at: Mapped[DateTime] = mapped_column(DateTime(timezone=True), server_default=func.now(), onupdate=func.now())

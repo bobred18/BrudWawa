@@ -13,7 +13,7 @@ RESPONSE_SCHEMA = {
         "category": {
             "type": "string",
             "enum": [
-                "śmieci", "graffiti", "dziura_w_drodze", "uszkodzona_infrastruktura",
+                "smieci", "graffiti", "dziura_w_drodze", "uszkodzona_infrastruktura",
                 "zanieczyszczenie_wody", "zanieczyszczenie_powietrza", "niebezpieczne_drzewo", "inne"
             ],
         },
@@ -21,7 +21,7 @@ RESPONSE_SCHEMA = {
         "threat_level": {"type": "integer"},
         "suggested_service": {
             "type": "string",
-            "enum": ["straż_miejska", "sanepid", "straż_pożarna", "zarząd_dróg", "wodociągi", "inne"],
+            "enum": ["straz_miejska", "sanepid", "straz_pozarna", "zarzad_drog", "wodociagi", "inne"],
         },
     },
     "required": ["title", "category", "description", "threat_level", "suggested_service"],
