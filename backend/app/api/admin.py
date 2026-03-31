@@ -18,23 +18,6 @@ def parse_location(wkt: str) -> tuple[float, float]:
     return float(coords[1]), float(coords[0])
 
 
-@router.get("/reports/pending", response_model=list[ReportResponse])
-async def list_pending(
-    current_admin: User = Depends(get_current_admin),
-    db: AsyncSession = Depends(get_db),
-):
-    result = await db.execute(
-        select(Report).where(Report.status == ReportStatus.pending).order_by(Report.created_at)
-    )
-    reports = result.scalars().all()
-
-    rows = []
-    for r in reports:
-        wkt = await db.scalar(ST_AsText(r.location))
-        lat, lon = parse_location(wkt)
-        rows.append({**r.__dict__, "latitude": lat, "longitude": lon})
-    return rows
-
 
 @router.get("/reports", response_model=list[ReportResponse])
 async def list_all_reports(
