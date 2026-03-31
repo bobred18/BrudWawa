@@ -8,6 +8,7 @@ from app.db.session import get_db
 from app.models.report import Report, ReportStatus
 from app.models.user import User
 from app.schemas.report import ReportResponse, ReportUpdate
+from app.services.websocket import ws_manager
 
 router = APIRouter(prefix="/api/admin", tags=["admin"])
 
@@ -77,7 +78,21 @@ async def approve_report(
     await db.refresh(report)
     wkt = await db.scalar(ST_AsText(report.location))
     lat, lon = parse_location(wkt)
-    return {**report.__dict__, "latitude": lat, "longitude": lon}
+    result = {**report.__dict__, "latitude": lat, "longitude": lon}
+
+    await ws_manager.broadcast({
+        "type": "new_report",
+        "report": {
+            "id": report.id,
+            "title": report.title,
+            "category": report.category,
+            "threat_level": report.threat_level,
+            "latitude": lat,
+            "longitude": lon,
+        },
+    })
+
+    return result
 
 
 @router.post("/reports/{report_id}/reject", response_model=ReportResponse)
