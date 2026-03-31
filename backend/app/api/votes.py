@@ -12,6 +12,7 @@ from app.schemas.vote import VoteCreate, VoteResponse
 router = APIRouter(prefix="/api/reports", tags=["votes"])
 
 
+# if you post the same vote again IT GETS REMOVED.
 @router.post("/{report_id}/vote", response_model=VoteResponse)
 async def vote(
     report_id: int,

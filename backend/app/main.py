@@ -1,5 +1,6 @@
 from fastapi import FastAPI
 
+from app.api.admin import router as admin_router
 from app.api.analyze import router as analyze_router
 from app.api.auth import router as auth_router
 from app.api.comments import router as comments_router
@@ -15,6 +16,7 @@ app.include_router(analyze_router)
 app.include_router(reports_router)
 app.include_router(comments_router)
 app.include_router(votes_router)
+app.include_router(admin_router)
 
 
 @app.get("/api/health")
