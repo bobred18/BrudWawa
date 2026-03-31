@@ -16,6 +16,20 @@ client = Minio(
 def ensure_bucket():
     if not client.bucket_exists(settings.minio_bucket):
         client.make_bucket(settings.minio_bucket)
+        policy = f"""{{
+            "Version": "2012-10-17",
+            "Statement": [{{
+                "Effect": "Allow",
+                "Principal": {{"AWS": ["*"]}},
+                "Action": ["s3:GetObject"],
+                "Resource": ["arn:aws:s3:::{settings.minio_bucket}/*"]
+            }}]
+        }}"""
+        client.set_bucket_policy(settings.minio_bucket, policy)
+
+
+def get_public_url(key: str) -> str:
+    return f"http://{settings.minio_endpoint}/{settings.minio_bucket}/{key}"
 
 
 def upload_image(data: bytes, content_type: str) -> str:
