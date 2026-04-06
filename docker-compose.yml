@@ -62,6 +62,7 @@ services:
       JWT_ALGORITHM: HS256
       JWT_EXPIRE_MINUTES: 60
       GEMINI_API_KEY: ${GEMINI_API_KEY}
+      FIREBASE_CREDENTIALS_B64: ${FIREBASE_CREDENTIALS_B64}
     volumes:
       - ./backend:/app
     ports:
