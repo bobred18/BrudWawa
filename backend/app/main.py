@@ -1,6 +1,7 @@
 from fastapi import FastAPI
 
 from app.api.admin import router as admin_router
+from app.api.users import router as users_router
 from app.api.notifications import router as notifications_router
 from app.api.images import router as images_router
 from app.api.stats import router as stats_router
@@ -21,6 +22,7 @@ app.include_router(reports_router)
 app.include_router(comments_router)
 app.include_router(votes_router)
 app.include_router(admin_router)
+app.include_router(users_router)
 app.include_router(notifications_router)
 app.include_router(images_router)
 app.include_router(stats_router)
