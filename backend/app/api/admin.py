@@ -131,3 +131,16 @@ async def resolve_report(
     wkt = await db.scalar(ST_AsText(report.location))
     lat, lon = parse_location(wkt)
     return {**report.__dict__, "latitude": lat, "longitude": lon}
+
+
+@router.delete("/reports/{report_id}", status_code=204)
+async def delete_report(
+    report_id: int,
+    current_admin: User = Depends(get_current_admin),
+    db: AsyncSession = Depends(get_db),
+):
+    report = await db.get(Report, report_id)
+    if not report:
+        raise HTTPException(status_code=404, detail="Report not found")
+    await db.delete(report)
+    await db.commit()
