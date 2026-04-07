@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from pydantic import BaseModel, EmailStr
 
 
@@ -19,6 +21,15 @@ class TokenResponse(BaseModel):
 class UserResponse(BaseModel):
     id: int
     email: str
+    display_name: str | None
+    bio: str | None
     is_admin: bool
+    created_at: datetime
 
     model_config = {"from_attributes": True}
+
+
+class UserUpdate(BaseModel):
+    email: EmailStr | None = None
+    display_name: str | None = None
+    bio: str | None = None
