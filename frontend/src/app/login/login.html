@@ -1,0 +1,12 @@
+<div class="w-md bg-green-100 text-center p-12 shadow-sm mx-auto mt-20">
+    <h1 class="text-5xl text-center mt-3 mb-20">BrudWawa</h1>
+    <main>
+        <form [formGroup]="loginForm" (ngSubmit)="log_in()">
+            <input placeholder="email" type="email"  formControlName="email" class="bg-gray-100 p-3 text-base w-full mb-3 focus:outline-cyan-200 focus:outline-2">
+            <input placeholder="password"  formControlName="username" class="bg-gray-100 p-3 text-base w-full mb-3 focus:outline-cyan-200 focus:outline-2">
+            <button type="submit" [disabled]="loading" class="py-3 px-10 hover:bg-cyan-200 hover:cursor-pointer bg-cyan-300 rounded-full">Log in</button>
+            <div *ngIf="errorMessage" class="error">{{ errorMessage }}</div>
+        </form>
+    </main>
+
+</div>
