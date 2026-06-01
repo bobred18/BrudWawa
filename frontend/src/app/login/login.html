@@ -1,10 +1,18 @@
 <div class="w-md bg-green-100 text-center p-12 shadow-sm mx-auto mt-20">
-    <h1 class="text-5xl text-center mt-3 mb-20">BrudWawa</h1>
+    <h1 class="text-5xl text-center mt-3 mb-10">BrudWawa</h1>
     <main>
+        <h3 *ngIf="register; else Log" class="text-2xl text-center mt-3 mb-3"> Sign up</h3>
+        <ng-template #Log><h3 class="text-2xl text-center mt-3 mb-3">Log in</h3> </ng-template>
+        <h3 *ngIf="new_user" class="text-2xl text-center mt-3 mb-3"> Registration successfull. Please log in</h3>
+
         <form [formGroup]="loginForm" (ngSubmit)="log_in()">
-            <input placeholder="email" type="email"  formControlName="email" class="bg-gray-100 p-3 text-base w-full mb-3 focus:outline-cyan-200 focus:outline-2">
-            <input placeholder="password"  formControlName="username" class="bg-gray-100 p-3 text-base w-full mb-3 focus:outline-cyan-200 focus:outline-2">
-            <button type="submit" [disabled]="loading" class="py-3 px-10 hover:bg-cyan-200 hover:cursor-pointer bg-cyan-300 rounded-full">Log in</button>
+            <input placeholder="email" type="email"  formControlName="email" class="bg-gray-100 p-3 text-base w-full mt-3 focus:outline-cyan-200 focus:outline-2">
+            <div class="text-red-600" *ngIf="loginForm.get('email')?.hasError('email')">Invalid email</div>
+            <input placeholder="password"  formControlName="password" class="bg-gray-100 p-3 text-base w-full mt-3 focus:outline-cyan-200 focus:outline-2">
+            <input *ngIf="register" placeholder="confirm password"  formControlName="password2" class="bg-gray-100 p-3 text-base w-full mt-3 focus:outline-cyan-200 focus:outline-2">
+            <button type="submit" [disabled]="loading" class="py-3 px-10 my-5 hover:bg-cyan-200 hover:cursor-pointer bg-cyan-300 rounded-full">{{form_message}}</button>
+            <div *ngIf="!register; else log_message">New to BrudWawa? <p class="hover:cursor-pointer text-cyan-300 hover:text-cyan-200 inline" (click)="register=true; form_message='Register';">Register</p></div>
+             <ng-template #log_message><div>We're already acquited? <p class="hover:cursor-pointer text-cyan-300 hover:text-cyan-200 inline" (click)="register=false;form_message='Log in';">Log in</p></div></ng-template>
             <div *ngIf="errorMessage" class="error">{{ errorMessage }}</div>
         </form>
     </main>

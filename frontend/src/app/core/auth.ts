@@ -8,7 +8,7 @@ import { TokenStorageService } from './token-storage';
 export class AuthService {
   private currentUserSubject: BehaviorSubject<any>;
   public currentUser: Observable<any>;
-  private apiUrl = 'http://localhost:8000/api';
+  private apiUrl = sessionStorage.getItem("apiURL");
 
   constructor(
     private http: HttpClient,
@@ -25,7 +25,7 @@ export class AuthService {
   }
 
   login(username: string, password: string): Observable<any> {
-    return this.http.post(`${this.apiUrl}/auth/login`, { username, password }).pipe(
+    return this.http.post(`${this.apiUrl}/auth/login`, { email:username, password:password }).pipe(
       map((response: any) => {
         // Store user details and jwt token
         this.tokenStorage.saveToken(response.token);
