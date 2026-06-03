@@ -20,9 +20,11 @@ export class AddIssue {
     private fb: FormBuilder
   ){
     this.loginForm = this.fb.group({
-      email: ['', [Validators.required, Validators.email]],
-      password: ['', Validators.minLength(5)],
-      password2: ['',],
+      title: ['', Validators.required],
+      description: ['', Validators.minLength(10)],
+      category: ['',Validators.required],
+      institution: ['',],
+
     });
   }
   ask_clanker(){

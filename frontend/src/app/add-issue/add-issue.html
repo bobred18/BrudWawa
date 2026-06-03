@@ -3,18 +3,29 @@
     <main>
         <h3 class="text-2xl text-center mt-3 mb-3">Report violation</h3>
 
-        <form [formGroup]="loginForm" (ngSubmit)="log_in()">
+        <form [formGroup]="inputForm" (ngSubmit)="file_report()">
             <div> image</div>
             <div>image input</div>
-            <button  [disabled]="photo_ready" class="py-3 px-10 my-5 hover:bg-cyan-200 hover:cursor-pointer bg-cyan-300 rounded-full">Analise with AI</button>
+            <button  [disabled]="photo_ready" (click)="ask_clanker()" class="py-3 px-10 my-5 hover:bg-cyan-200 hover:cursor-pointer bg-cyan-300 rounded-full">Analise with AI</button>
             <input placeholder="Title" type="text"  formControlName="title" class="bg-gray-100 p-3 text-base w-full mt-3 focus:outline-cyan-200 focus:outline-2">
             <div class="text-red-600" *ngIf="loginForm.get('email')?.hasError('email')">Invalid email</div>
             <textarea placeholder="description" formControlName="description"></textarea>
             <select formControlName="category">
-                <option value="volvo">Volvo</option>
-                <option value="saab">Saab</option>
-                <option value="mercedes">Mercedes</option>
-                <option value="audi">Audi</option>
+                <option value="pollution">Pollution</option>
+                <option value="illegal_trashyard">Illegal trashyard</option>
+                <option value="graffiti">Graffiti</option>
+                <option value="damaged_infrastruction">Damaged Infrastruction</option>
+                <option value="noise">Noise</option>
+                <option value="other">Other</option>
+            </select>
+            <div>danger level</div>
+             <select formControlName="institution">
+                <option value="police">Police</option>
+                <option value="city_inspection">City inspection</option>
+                <option value="firefighters">Firefighters</option>
+                <option value="health_inspection">Health Inspection</option>
+                <option value="road_department">Road department</option>
+                <option value="other">Other</option>
             </select>
             <button type="submit" [disabled]="loading" class="py-3 px-10 my-5 hover:bg-cyan-200 hover:cursor-pointer bg-cyan-300 rounded-full">{{form_message}}</button>
             
