@@ -1,0 +1,39 @@
+<link rel="stylesheet" href="../../resources/fontello/css/fontello.css">
+
+<div class="w-xl  text-center mx-auto mt-20">
+    <h1 class="text-5xl text-center mt-3 mb-10">BrudWawa</h1>
+    <main>
+        <div (click)="to_map()"  class="bg-green-200 rounded-2xl h-40 mb-2 content-center text-2xl hover:bg-green-600 hover:text-white transition-colors duration-500 cursor-pointer">
+            <i class="icon-map text-5xl"></i><br>
+            <span>View issues</span>
+        </div>
+        <div *ngIf="logged; else log_menu">
+            <div class="mb-2 flex justify-center">
+                <div (click)="to_report()"  class="w-1/2 h-40 bg-amber-300 rounded-2xl mr-2 content-center text-2xl hover:bg-amber-700 hover:text-white transition-colors duration-500 cursor-pointer">
+                    <i class="icon-camera text-5xl"></i><br>
+                    <span>Report violation</span>
+                </div>
+                <div (click)="to_stats()"  class="w-1/2 h-40 bg-amber-300 rounded-2xl content-center text-2xl hover:bg-amber-700 hover:text-white transition-colors duration-500 cursor-pointer">
+                    <i class="icon-box text-5xl"></i><br>
+                    <span>Statistics</span>
+                </div>
+            </div>
+            <div (click)="to_profile()"  class=" bg-cyan-300 rounded-2xl h-40 content-center text-2xl hover:bg-cyan-400 hover:text-white transition-colors duration-500 cursor-pointer">
+                <i class="icon-user text-5xl"></i><br>
+                <span>Profile</span>
+            </div>
+        </div>
+        <ng-template #log_menu>
+            <div (click)="to_stats()" class=" mb-2 h-40  bg-amber-300 rounded-2xl content-center text-2xl hover:bg-amber-700 hover:text-white transition-colors duration-500 cursor-pointer">
+                    <i class="icon-box text-5xl"></i><br>
+                    <span>Statistics</span>
+                </div>
+            <div (click)="to_log()"  class=" bg-cyan-300 rounded-2xl h-40 content-center text-2xl hover:text-white transition-colors duration-500">
+                <i class="icon-lock-open-alt text-5xl"></i><br>
+                <span>Log in</span>
+            </div>
+            
+        </ng-template>
+</main>
+</div>
+
