@@ -1,4 +1,5 @@
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 
 from app.api.admin import router as admin_router
 from app.api.users import router as users_router
@@ -14,6 +15,17 @@ from app.api.uploads import router as uploads_router
 from app.api.votes import router as votes_router
 
 app = FastAPI(title="BrudWawa API")
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=[
+        "http://localhost:4200",          # Angular dev server
+        "https://brudwawa.duckdns.org",   # production (same-origin, but explicit)
+    ],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 app.include_router(auth_router)
 app.include_router(uploads_router)
