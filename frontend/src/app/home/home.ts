@@ -25,7 +25,7 @@ export class Home {
     this.router.navigate(['/map']);
   }
   to_report(){
-    this.router.navigate(['/report']);
+    this.router.navigate(['/add_issue']);
   }
   to_log(){
     this.router.navigate(['/login']);
