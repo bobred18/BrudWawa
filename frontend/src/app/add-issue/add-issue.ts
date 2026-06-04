@@ -1,7 +1,9 @@
 import { Component } from '@angular/core';
 import { NgIf } from '@angular/common';
 import { FormsModule, ReactiveFormsModule,FormBuilder, FormGroup, Validators } from '@angular/forms';
-
+import { signal } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
 @Component({
   selector: 'app-add-issue',
   imports: [
@@ -11,26 +13,122 @@ import { FormsModule, ReactiveFormsModule,FormBuilder, FormGroup, Validators } f
   templateUrl: './add-issue.html',
   styleUrl: './add-issue.css',
 })
+@Injectable({providedIn: 'root'})
 export class AddIssue {
-  loginForm: FormGroup;
+  inputForm: FormGroup;
   errorMessage: string | null = null;
+  analMessage: string | null = null;
   returnUrl: string = '';
   loading = false;
+  photo_ready=false;
+  photo_sent=false;
+  image_key:any;
+  selectedFile = signal<File | null>(null);
+  imageSrc = signal<string | null>(null);
+  private http = inject(HttpClient);
   constructor(
-    private fb: FormBuilder
+    private fb: FormBuilder,
   ){
-    this.loginForm = this.fb.group({
+    this.inputForm = this.fb.group({
       title: ['', Validators.required],
       description: ['', Validators.minLength(10)],
       category: ['',Validators.required],
-      institution: ['',],
+      danger_level: ['',Validators.required],
+      institution: ['',Validators.required],
 
     });
   }
   ask_clanker(){
-    
+    const file = this.selectedFile();
+    /*if (!file) return;
+    const formData = new FormData();
+    formData.append('file', file);
+    this.http.post<any>(`${sessionStorage.getItem("apiURL")}/uploads`, formData).subscribe({
+      next: data => {
+            this.image_key=data.key;
+            console.log(this.image_key);
+        },
+        error: (error) => {
+            this.analMessage = error.error.detail;
+            console.error('There was an error!', error);
+            return;
+        }
+      })*/
+    this.image_key="c9663eb9-0133-485d-a6cb-a68f501fe9ed.jpeg";
+    if(!this.image_key) return;
+    this.photo_sent=true;
+    this.inputForm.get('title')?.setValue("data.title");
+    this.inputForm.get('description')?.setValue("data.description");
+    this.inputForm.get('category')?.setValue("illegal_trashyard");
+    var input =document.getElementById("3") as HTMLInputElement;
+    input.checked=true;
+    this.inputForm.get('institution')?.setValue("police");
+    /*this.http.post<any>(`${sessionStorage.getItem("apiURL")}/reports/analyze`, {image_key:this.image_key }).subscribe({
+        next: data => {
+            this.inputForm.get('title')?.setValue(data.title);
+            this.inputForm.get('description')?.setValue(data.description);
+            //this.inputForm.get('category')?.setValue(data.category);
+            var input =document.getElementById("data.threat_level") as HTMLInputElement;
+            input.checked=true;
+            //this.inputForm.get('institution')?.setValue(data.suggested_service);
+//map clanker output onto form values 
+            var category=data.category;
+            switch(category){
+              case "smieci": category="illegal_trashyard"; break;
+              case "graffiti": category="graffiti"; break;
+              case "dziura_w_drodze": category="road_damage"; break;
+              case "uszkodzona_infrastruktura": category="damaged_infrastruction"; break;
+              case "zanieczyszczenie_wody": category="water_pollution"; break;
+              case "zanieczyszczenie_powietrza": category="pollution"; break;
+              case "niebezpieczne_drzewo": category="dangerous_foliage"; break;
+              default: category="other";
+            }
+            this.inputForm.get('category')?.setValue(category);
+            category=data.suggested_service;
+            switch(category){
+              case "straz_miejska": category="city_inspection"; break;
+              case "sanepid": category="health_inspection"; break;
+              case "straz_pozarna": category="firefighters"; break;
+              case "zarzad_drog": category="road_department"; break;
+              case "wodociagi": category="water_lord"; break;
+              default: category="other";
+            }
+            this.inputForm.get('institution')?.setValue(category);
+            console.log(data);
+        },
+        error: (error) => {
+            if(error.error)this.analMessage = error.error.detail;
+            else this.analMessage="Clanker was taken behind the shed, You can still use that lump lodged between your ears";
+            this.inputForm.get('title')?.setValue("");
+            console.error('There was an error!', error);
+        }
+      })*/
+
   }
   file_report(){
+    
+  }
 
+  input_image(event: Event) {
+    const input = event.target as HTMLInputElement;
+
+    if (!input.files?.length) {
+      return;
+    }
+
+    const file = input.files[0];
+    if(!["image/jpg","image/jpeg","image/png","image/webp"].find((elem)=>elem==file.type)){
+      return;
+    }
+    this.selectedFile.set(file);
+
+    const reader = new FileReader();
+
+    reader.onload = () => {
+      this.imageSrc.set(reader.result as string);
+    };
+
+    reader.readAsDataURL(file);
+    this.photo_ready=true;
   }
 }

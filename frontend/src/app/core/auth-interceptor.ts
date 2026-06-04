@@ -10,6 +10,7 @@ import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { TokenStorageService } from './token-storage';
 import { Router } from '@angular/router';
+import { timeout } from 'rxjs/operators';
 
 @Injectable()
 export class authInterceptor implements HttpInterceptor {
@@ -36,7 +37,7 @@ export class authInterceptor implements HttpInterceptor {
       });
     }
 
-    return next.handle(authReq).pipe(
+    return next.handle(authReq).pipe(timeout(5000),
       catchError((error: HttpErrorResponse) => {
         if (error.status === 401 || error.status === 403) {
           // Auto logout if 401 or 403 response returned from API
