@@ -28,8 +28,8 @@ export class AuthService {
     return this.http.post(`${this.apiUrl}/auth/login`, { email:username, password:password }).pipe(
       map((response: any) => {
         // Store user details and jwt token
-        this.tokenStorage.saveToken(response.token);
-        const user = this.parseJwt(response.token);
+        this.tokenStorage.saveToken(response.access_token);
+        const user = this.parseJwt(response.access_token);
         this.tokenStorage.saveUser(user);
         this.currentUserSubject.next(user);
         return user;

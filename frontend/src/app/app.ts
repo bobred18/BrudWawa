@@ -13,6 +13,6 @@ export class App {
   protected readonly title = signal('BrudWawa');
   ngOnInit(){
     sessionStorage.setItem("apiURL","https://brudwawa.duckdns.org/api")
-    //https://brudwawa.duckdns.org/api  http://localhost:8000/api
+    //https://brudwawa.duckdns.org/api  https://localhost:8000/api
   }
 }

@@ -34,8 +34,8 @@ export class Login {
     private route: ActivatedRoute
   ) {
     this.loginForm = this.fb.group({
-      email: ['', [Validators.required, Validators.email]],
-      password: ['', Validators.minLength(5)],
+      email: ['', [/*Validators.required, Validators.email*/]],
+      password: ['', /*Validators.minLength(5)*/],
       password2: ['',],
     });
 
@@ -43,19 +43,25 @@ export class Login {
     this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/home';
   }
   log_in(){
-    if (this.loginForm.invalid)return;
+    if (this.loginForm.invalid){
+      if(this.loginForm.get('email')?.hasError('email')) this.errorMessage="Invalid email";
+      if(this.loginForm.get('password')?.hasError('minlength')) this.errorMessage="Password is too short";
+      return;
+    }
     this.loading = true;
 
     if(!this.register){
       const { email, password} = this.loginForm.value;
-      this.authService.login(email, password).subscribe({
-        next: () => {
+      //this.authService.login(email, password).subscribe({
+      this.authService.login("admin@brudwawa.pl", "adminadmin").subscribe({
+        next: (user) => {
           sessionStorage.setItem("logged","yes");
           this.router.navigateByUrl(this.returnUrl);
           this.loading = false;
         },
         error: (error) => {
           this.errorMessage = 'Invalid username or password';
+          this.loginForm.get('password')?.reset();
           this.loading = false;
         }
       });
@@ -67,18 +73,26 @@ export class Login {
       const { email, password, password2 } = this.loginForm.value;
       if(password!=password2){
         this.errorMessage="Passwords must match"; 
+        this.loading = false;
         return;
       }
       this.http.post<any>(`${sessionStorage.getItem("apiURL")}/auth/register`, { email:email, password:password }).subscribe({
         next: data => {
+            this.loginForm.get('password')?.reset();
+            this.loginForm.get('password2')?.reset();
             this.register=false;
             this.new_user=true;
+
         },
         error: (error) => {
-            this.errorMessage = error.message;
+            this.errorMessage = error.error.detail;
             console.error('There was an error!', error);
+            this.loginForm.get('password')?.reset();
+            this.loginForm.get('password2')?.reset();
+
         }
-    })
+      })
+      this.loading = false;
     }
   }
 }
