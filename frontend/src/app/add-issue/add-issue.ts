@@ -87,6 +87,10 @@ export class AddIssue {
 
   }
   async file_report(){
+    if(!this.photo_ready){
+      this.errorMessage="Add photo";
+      return;
+    }
     if(!this.photo_sent){
         await this.upload_image();
         if(!this.image_key) return;

@@ -19,15 +19,16 @@ input[type="radio"]{
 input[type=file]::file-selector-button {
   margin-right: 20px;
   border: none;
-  background: #53eafd;
+  background: #7bf1a8;
   padding: 8px 15px;
   font-size: 18px;
   border-radius: calc(infinity * 1px);
   color: black;
   cursor: pointer;
-  transition: background .2s ease-in-out;
+  transition:  .5s ease-in-out;
 }
 
 input[type=file]::file-selector-button:hover {
-  background: #a2f4fd;
+  background: oklch(52.7% 0.154 150.069);
+  color:oklch(87.9% 0.169 91.605);
 }

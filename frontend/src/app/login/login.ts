@@ -5,6 +5,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { AuthService } from '../core/auth';
 import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { ChangeDetectorRef } from '@angular/core';
 
 @Component({
   selector: 'app-login',
@@ -28,32 +29,32 @@ export class Login {
   form_message="Log in";
   private http = inject(HttpClient);
    constructor(
+    private changeDetectorRef: ChangeDetectorRef,
     private fb: FormBuilder,
     private authService: AuthService,
     private router: Router,
     private route: ActivatedRoute
   ) {
     this.loginForm = this.fb.group({
-      email: ['', [/*Validators.required, Validators.email*/]],
-      password: ['', /*Validators.minLength(5)*/],
+      email: ['', [Validators.required, Validators.email]],
+      password: ['', Validators.minLength(5)],
       password2: ['',],
     });
 
-    // Get return url from route parameters or default to '/'
     this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/home';
   }
   log_in(){
     if (this.loginForm.invalid){
-      if(this.loginForm.get('email')?.hasError('email')) this.errorMessage="Invalid email";
-      if(this.loginForm.get('password')?.hasError('minlength')) this.errorMessage="Password is too short";
+      if(this.loginForm.get('email')?.hasError('email') || this.loginForm.get('email')?.hasError('required')) this.errorMessage="Invalid email";
+      if(this.loginForm.get('password')?.hasError('minlength'),this.loginForm.get('password')?.hasError('required')) this.errorMessage="Password is too short";
+      this.changeDetectorRef.detectChanges();
       return;
     }
     this.loading = true;
 
     if(!this.register){
       const { email, password} = this.loginForm.value;
-      //this.authService.login(email, password).subscribe({
-      this.authService.login("admin@brudwawa.pl", "adminadmin").subscribe({
+      this.authService.login(email, password).subscribe({
         next: (user) => {
           sessionStorage.setItem("logged","yes");
           this.router.navigateByUrl(this.returnUrl);
@@ -63,17 +64,15 @@ export class Login {
           this.errorMessage = 'Invalid username or password';
           this.loginForm.get('password')?.reset();
           this.loading = false;
+          this.changeDetectorRef.detectChanges();
         }
       });
-      /*this.http.post("https://brudwawa.duckdns.org/api/auth/login",{email:this.email,password:this.password}).subscribe(data =>{
-        this.token=data.valueOf();
-      })
-      console.log(this.token);*/
     } else{
       const { email, password, password2 } = this.loginForm.value;
       if(password!=password2){
         this.errorMessage="Passwords must match"; 
         this.loading = false;
+        this.changeDetectorRef.detectChanges();
         return;
       }
       this.http.post<any>(`${sessionStorage.getItem("apiURL")}/auth/register`, { email:email, password:password }).subscribe({
@@ -89,7 +88,7 @@ export class Login {
             console.error('There was an error!', error);
             this.loginForm.get('password')?.reset();
             this.loginForm.get('password2')?.reset();
-
+            this.changeDetectorRef.detectChanges();
         }
       })
       this.loading = false;

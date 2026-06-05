@@ -1,13 +1,13 @@
-<div class="w-md md:w-lg lg:w-xl bg-green-100 text-center p-12 shadow-sm mx-auto mt-20 text-lg">
-    <h1 class="text-5xl text-center mt-3 mb-10">BrudWawa</h1>
+<div class="w-full sm:w-lg md:w-xl lg:w-3xl xl:w-5xl bg-green-100 text-center p-12 shadow-sm mx-auto text-lg">
+    <h1 class="text-5xl text-center mb-5">BrudWawa</h1>
     <main>
-        <h3 class="text-2xl text-center mt-3 mb-3">Report violation</h3>
+        <h3 class="text-2xl text-center mb-3">Report violation</h3>
 
         <form *ngIf="!report_sent else thanks_card" [formGroup]="inputForm" (ngSubmit)="file_report()">
             <img *ngIf="imageSrc() else image_placeholder" [src]="imageSrc()" [alt]="selectedFile()?.name" class="">
             <ng-template #image_placeholder><div class="w-full h-64 md:h-72 lg:h-80 bg-gray-100"></div></ng-template>
             <input class="my-2 text-sm" (change)="input_image($event)" type="file" accept="image/*">
-            <button  [disabled]="!photo_ready" (click)="ask_clanker();$event.preventDefault();" class="py-3 px-10 my-5 hover:bg-cyan-200 hover:cursor-pointer bg-cyan-300 rounded-full">Analyze with AI</button>
+            <button  [disabled]="!photo_ready" (click)="ask_clanker();$event.preventDefault();" class="py-3 px-10 my-5 hover:bg-green-700 hover:cursor-pointer hover:text-amber-300 transition-colors duration-500 bg-green-300 rounded-full">Analyze with AI</button>
             <div *ngIf="analMessage" class="text-red-600">{{ analMessage }}</div>
             <input placeholder="Title" type="text"  formControlName="title" class="bg-gray-100 p-3 text-base w-full mt-3 focus:outline-cyan-200 focus:outline-2">
             <textarea placeholder="description" formControlName="description" class="bg-gray-100 p-3 text-base w-full h-60 md:h-40 mt-3 focus:outline-cyan-200 focus:outline-2"></textarea>
@@ -66,7 +66,7 @@
                     <option value="other">Other</option>
                 </select>
             </div>
-            <button class="py-3 px-10 my-5 hover:bg-cyan-200 hover:cursor-pointer bg-cyan-300 rounded-full" (click)="mapVisible=true;$event.preventDefault();">
+            <button class="py-3 px-10 my-5 hover:bg-green-700 hover:cursor-pointer hover:text-amber-300 transition-colors duration-500 bg-green-300 rounded-full" (click)="mapVisible=true;$event.preventDefault();">
             Wybierz lokalizację
             </button>
 
@@ -87,7 +87,7 @@
                     </h2>
 
                     <button
-                    class="py-3 px-5 hover:bg-cyan-200 hover:cursor-pointer bg-cyan-300 rounded-full"
+                    class="py-3 px-5 hover:bg-green-700 hover:cursor-pointer hover:text-amber-300 transition-colors duration-500 bg-green-300 rounded-full"
                     (click)="mapVisible=false; $event.preventDefault();">
                     Zamknij
                     </button>
@@ -104,9 +104,9 @@
                 </div>
             </div>
 }
-            <button type="submit" [disabled]="loading" class="py-3 px-10 my-10 hover:bg-cyan-200 hover:cursor-pointer bg-cyan-300 rounded-full">Report violation</button>
-            
             <div *ngIf="errorMessage" class="text-red-600 ">{{ errorMessage }}</div>
+            <button type="submit" [disabled]="loading" class="py-3 px-10 my-10 hover:bg-green-700 hover:cursor-pointer hover:text-amber-300 transition-colors duration-500 bg-green-300 rounded-full">Report violation</button>
+            
         </form>
         <ng-template #thanks_card><h2 class="text-2xl font-bold text-green-500">Report filled</h2><p class="text-lg pb-60">Thank you for helping to keep the city clean and safe</p></ng-template>
     </main>
