@@ -1,12 +1,14 @@
 import { Component, signal } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
+import { RouterOutlet, Router, ActivatedRoute, NavigationEnd } from '@angular/router';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { authInterceptor } from './core/auth-interceptor';
 import {GoogleMapsModule} from '@angular/google-maps'
+import { filter } from 'rxjs';
+import { Header } from './header/header';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet,GoogleMapsModule],
+  imports: [RouterOutlet,GoogleMapsModule, Header],
   templateUrl: './app.html',
   styleUrl: './app.css'
 })
@@ -15,5 +17,23 @@ export class App {
   ngOnInit(){
     sessionStorage.setItem("apiURL","https://brudwawa.duckdns.org/api")
     //https://brudwawa.duckdns.org/api  https://localhost:8000/api
+  }
+  showNavbar = true;
+
+  constructor(
+    private router: Router,
+    private activatedRoute: ActivatedRoute
+  ) {
+    this.router.events
+      .pipe(filter(event => event instanceof NavigationEnd))
+      .subscribe(() => {
+        let route = this.activatedRoute.firstChild;
+
+        while (route?.firstChild) {
+          route = route.firstChild;
+        }
+
+        this.showNavbar = !route?.snapshot.data['hideNavbar'];
+      });
   }
 }
