@@ -37,7 +37,7 @@ export class authInterceptor implements HttpInterceptor {
       });
     }
 
-    return next.handle(authReq).pipe(timeout(5000),
+    return next.handle(authReq).pipe(timeout(10000),
       catchError((error: HttpErrorResponse) => {
         if (error.status === 401 || error.status === 403) {
           // Auto logout if 401 or 403 response returned from API

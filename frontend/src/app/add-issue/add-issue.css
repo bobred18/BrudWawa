@@ -19,14 +19,15 @@ input[type="radio"]{
 input[type=file]::file-selector-button {
   margin-right: 20px;
   border: none;
-  background: #084cdf;
-  padding: 10px 20px;
-  border-radius: 10px;
-  color: #fff;
+  background: #53eafd;
+  padding: 8px 15px;
+  font-size: 18px;
+  border-radius: calc(infinity * 1px);
+  color: black;
   cursor: pointer;
   transition: background .2s ease-in-out;
 }
 
 input[type=file]::file-selector-button:hover {
-  background: #0d45a5;
+  background: #a2f4fd;
 }
