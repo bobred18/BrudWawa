@@ -41,6 +41,7 @@ export class Login {
       password2: ['',],
     });
 
+
     this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/home';
   }
   log_in(){
@@ -75,7 +76,7 @@ export class Login {
         this.changeDetectorRef.detectChanges();
         return;
       }
-      this.http.post<any>(`${sessionStorage.getItem("apiURL")}/auth/register`, { email:email, password:password }).subscribe({
+      this.http.post<any>(`${sessionStorage.getItem("apiURL")}/api/auth/register`, { email:email, password:password }).subscribe({
         next: data => {
             this.loginForm.get('password')?.reset();
             this.loginForm.get('password2')?.reset();
