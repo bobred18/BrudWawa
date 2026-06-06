@@ -15,7 +15,7 @@ import { Header } from './header/header';
 export class App {
   protected readonly title = signal('BrudWawa');
   ngOnInit(){
-    sessionStorage.setItem("apiURL","https://brudwawa.duckdns.org/api")
+    sessionStorage.setItem("apiURL","https://brudwawa.duckdns.org")
     //https://brudwawa.duckdns.org/api  https://localhost:8000/api
   }
   showNavbar = true;

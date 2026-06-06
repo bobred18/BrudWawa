@@ -5,14 +5,18 @@ import { signal } from '@angular/core';
 import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { GoogleMap } from '@angular/google-maps';
+import { MapMarker } from '@angular/google-maps';
 import { firstValueFrom } from 'rxjs';
+import { ChangeDetectorRef } from '@angular/core';
+
 @Component({
   selector: 'app-add-issue',
   imports: [
     NgIf,
     FormsModule,
     ReactiveFormsModule,
-    GoogleMap],
+    GoogleMap,
+    MapMarker],
   templateUrl: './add-issue.html',
   styleUrl: './add-issue.css',
 })
@@ -32,6 +36,7 @@ export class AddIssue {
   private http = inject(HttpClient);
   constructor(
     private fb: FormBuilder,
+    private changeDetectorRef: ChangeDetectorRef,
   ){
     this.inputForm = this.fb.group({
       title: ['', Validators.required],
@@ -46,7 +51,7 @@ export class AddIssue {
     if(!this.image_key) return;
     this.photo_sent=true;
     
-    this.http.post<any>(`${sessionStorage.getItem("apiURL")}/reports/analyze`, {image_key:this.image_key }).subscribe({
+    this.http.post<any>(`${sessionStorage.getItem("apiURL")}/api/reports/analyze`, {image_key:this.image_key }).subscribe({
         next: data => {
             this.inputForm.get('title')?.setValue(data.title);
             this.inputForm.get('description')?.setValue(data.description);
@@ -56,23 +61,23 @@ export class AddIssue {
 //map clanker output onto form values 
             var category=data.category;
             switch(category){
-              case "smieci": category="illegal_trashyard"; break;
-              case "graffiti": category="graffiti"; break;
-              case "dziura_w_drodze": category="road_damage"; break;
-              case "uszkodzona_infrastruktura": category="damaged_infrastruction"; break;
-              case "zanieczyszczenie_wody": category="water_pollution"; break;
-              case "zanieczyszczenie_powietrza": category="pollution"; break;
-              case "niebezpieczne_drzewo": category="dangerous_foliage"; break;
+              case "smieci": category="Illegal trashyard"; break;
+              case "graffiti": category="Graffiti"; break;
+              case "dziura_w_drodze": category="Road damage"; break;
+              case "uszkodzona_infrastruktura": category="Damaged infrastruction"; break;
+              case "zanieczyszczenie_wody": category="Water pollution"; break;
+              case "zanieczyszczenie_powietrza": category="Pollution"; break;
+              case "niebezpieczne_drzewo": category="Dangerous foliage"; break;
               default: category="other";
             }
             this.inputForm.get('category')?.setValue(category);
             category=data.suggested_service;
             switch(category){
-              case "straz_miejska": category="city_inspection"; break;
-              case "sanepid": category="health_inspection"; break;
-              case "straz_pozarna": category="firefighters"; break;
-              case "zarzad_drog": category="road_department"; break;
-              case "wodociagi": category="water_lord"; break;
+              case "straz_miejska": category="City inspection"; break;
+              case "sanepid": category="Health inspection"; break;
+              case "straz_pozarna": category="Firefighters"; break;
+              case "zarzad_drog": category="Road department"; break;
+              case "wodociagi": category="Water lord"; break;
               default: category="other";
             }
             this.inputForm.get('institution')?.setValue(category);
@@ -80,20 +85,16 @@ export class AddIssue {
         error: (error) => {
             if(error.error)this.analMessage = error.error.detail;
             else this.analMessage="Clanker was taken behind the shed, You can still use that lump lodged between your ears";
-            this.inputForm.get('title')?.setValue("");
+            this.changeDetectorRef.detectChanges();
             console.error('There was an error!', error);
         }
       })
 
   }
   async file_report(){
-    if(!this.photo_ready){
-      this.errorMessage="Add photo";
+    if(!this.longitude || !this.latitude){
+      this.errorMessage="Please select location"
       return;
-    }
-    if(!this.photo_sent){
-        await this.upload_image();
-        if(!this.image_key) return;
     }
     if(this.inputForm.invalid){
         if(this.inputForm.get('title')?.hasError("required")) this.errorMessage="Add title";
@@ -103,14 +104,19 @@ export class AddIssue {
         if(this.inputForm.get('institution')?.hasError("required")) this.errorMessage="Add institution";
         return;
     }
-    if(this.longitude==null || this.latitude==null){
-      this.errorMessage="Please select location"
+    if(!this.photo_ready){
+      this.errorMessage="Add photo";
       return;
     }
+    if(!this.photo_sent){
+        await this.upload_image();
+        if(!this.image_key) return;
+    }
+    
     this.loading=true;
     const {title, description, category, danger_level, institution}=this.inputForm.value;
     console.log(this.image_key);
-    this.http.post<any>(`${sessionStorage.getItem("apiURL")}/reports`, { title:title,description:description,category:category,
+    this.http.post<any>(`${sessionStorage.getItem("apiURL")}/api/reports`, { title:title,description:description,category:category,
       threat_level:danger_level,suggested_service:institution,image_key:this.image_key,longitude:this.longitude,latitude:this.latitude
      }).subscribe({
         next: data => {
@@ -135,7 +141,7 @@ export class AddIssue {
     this.loading=true;
     try{
       const response = await firstValueFrom(
-        this.http.post<any>(`${sessionStorage.getItem("apiURL")}/uploads`, formData)
+        this.http.post<any>(`${sessionStorage.getItem("apiURL")}/api/uploads`, formData)
         /*.subscribe({
           next: data => {
                 this.image_key=data.key;
@@ -154,6 +160,7 @@ export class AddIssue {
     }catch{
       this.errorMessage="Something went wrong";
     }
+    this.loading=false;
     return ;
   }
   input_image(event: Event) {
@@ -178,8 +185,8 @@ export class AddIssue {
   }
   mapVisible = false;
 
-  latitude: number | null = null;
-  longitude: number | null = null;
+  latitude: number=0;
+  longitude: number=0;
 
   center: google.maps.LatLngLiteral = {
     lat: 52.2297,
@@ -192,6 +199,6 @@ export class AddIssue {
     if (!event.latLng) return;
     this.latitude = event.latLng.lat();
     this.longitude = event.latLng.lng();
-    this.mapVisible=false;
+    //this.mapVisible=false;
   }
 }

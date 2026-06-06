@@ -1,0 +1,24 @@
+<div class="w-full h-[calc(100vh-132px)]">
+    @if(errorMessage){<div  class="text-red-600">{{ errorMessage }}</div>}
+    <google-map
+        *ngIf="map_loaded"
+        width="100%"
+        height="100%"
+        [center]="center"
+        [zoom]="zoom"
+        (mapClick)="mapClick($event)">
+        <map-info-window (click)="to_report()" class="hover:text-green-700 transition-colors duration-500">
+            <h3 class="text-xl font-bold">{{selected_report?.title}}</h3>
+            <p class="text-lg">{{selected_report?.category}}</p>
+            <p>Click to see details</p>
+        </map-info-window>
+    @for(marker of reports; track $index){
+        <map-marker
+            #markerElem="mapMarker"
+            [position]="{lat:marker.latitude,lng:marker.longitude}"
+            [options]="marker_versions[marker.threat_level-1]"
+            (mapClick)="openInfo(markerElem, marker)"
+        ></map-marker>
+    }
+    </google-map>
+</div>

@@ -4,7 +4,7 @@
         <h3 class="text-2xl text-center mb-3">Report violation</h3>
 
         <form *ngIf="!report_sent else thanks_card" [formGroup]="inputForm" (ngSubmit)="file_report()">
-            <img *ngIf="imageSrc() else image_placeholder" [src]="imageSrc()" [alt]="selectedFile()?.name" class="">
+            <img *ngIf="imageSrc() else image_placeholder" [src]="imageSrc()" [alt]="selectedFile()?.name" class="mx-auto">
             <ng-template #image_placeholder><div class="w-full h-64 md:h-72 lg:h-80 bg-gray-100"></div></ng-template>
             <input class="my-2 text-sm" (change)="input_image($event)" type="file" accept="image/*">
             <button  [disabled]="!photo_ready" (click)="ask_clanker();$event.preventDefault();" class="py-3 px-10 my-5 hover:bg-green-700 hover:cursor-pointer hover:text-amber-300 transition-colors duration-500 bg-green-300 rounded-full">Analyze with AI</button>
@@ -14,21 +14,21 @@
             <div class="flex justify-around items-center">
                 <p class="mr-2 w-50">Select Category: </p>
                 <select formControlName="category" class="bg-gray-100 p-3 text-base w-full mt-3 focus:outline-cyan-200 focus:outline-2">
-                    <option value="pollution">Air pollution</option>
-                    <option value="illegal_trashyard">Illegal trashyard</option>
-                    <option value="graffiti">Graffiti</option>
-                    <option value="road_damage">Road Damage</option>
-                    <option value="zionists">Zionists</option>
-                    <option value="damaged_infrastruction">Damaged Infrastruction</option>
-                    <option value="water_pollution">Water pollution</option>
-                    <option value="dangerous_foliage">Dangerous foliage</option>
-                    <option value="noise">Noise</option>
+                    <option value="Pollution">Air pollution</option>
+                    <option value="Illegal trashyard">Illegal trashyard</option>
+                    <option value="Graffiti">Graffiti</option>
+                    <option value="Road damage">Road Damage</option>
+                    <option value="Zionists">Zionists</option>
+                    <option value="Damaged infrastruction">Damaged Infrastruction</option>
+                    <option value="Water pollution">Water pollution</option>
+                    <option value="Dangerous foliage">Dangerous foliage</option>
+                    <option value="Noise">Noise</option>
                     <option value="other">Other</option>
                 </select>
             </div>
             <div>
                 <p class=" my-3">Danger level</p>
-                <div class="grid grid-cols-5 w-2/3 h-10  bg-gray-100 mx-auto bor">
+                <div class="grid grid-cols-5 w-2/3 h-10  bg-gray-100 mx-auto">
                     <div class="bg-lime-300 flex">
                         <input type="radio" id="1" name="danger_level" formControlName="danger_level" value="1">
                         <label for="1">1</label>
@@ -57,12 +57,12 @@
             <div class="flex justify-around items-center">
                 <p class="mr-2 w-50">Select service:</p>
                 <select formControlName="institution" class="bg-gray-100 p-3 text-base w-full mt-3 focus:outline-cyan-200 focus:outline-2">
-                    <option value="police">Police</option>
-                    <option value="city_inspection">City inspection</option>
-                    <option value="firefighters">Firefighters</option>
-                    <option value="health_inspection">Health Inspection</option>
-                    <option value="road_department">Road department</option>
-                    <option value="water_lord">Water lord</option>
+                    <option value="Police">Police</option>
+                    <option value="City inspection">City inspection</option>
+                    <option value="Firefighters">Firefighters</option>
+                    <option value="Health inspection">Health Inspection</option>
+                    <option value="Road department">Road department</option>
+                    <option value="Water lord">Water lord</option>
                     <option value="other">Other</option>
                 </select>
             </div>
@@ -76,8 +76,7 @@
             </div>
 
             @if(mapVisible) {
-            <div
-                class="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+            <div class="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
 
                 <div class="bg-white rounded-lg p-4 w-[90vw] h-[80vh]">
 
@@ -99,11 +98,15 @@
                     [center]="center"
                     [zoom]="zoom"
                     (mapClick)="mapClick($event)">
+                    <map-marker
+                        [position]="{lat: latitude,lng: longitude}"
+                        
+                    ></map-marker>
                 </google-map>
 
                 </div>
             </div>
-}
+            }
             <div *ngIf="errorMessage" class="text-red-600 ">{{ errorMessage }}</div>
             <button type="submit" [disabled]="loading" class="py-3 px-10 my-10 hover:bg-green-700 hover:cursor-pointer hover:text-amber-300 transition-colors duration-500 bg-green-300 rounded-full">Report violation</button>
             

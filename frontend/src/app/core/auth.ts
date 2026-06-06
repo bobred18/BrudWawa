@@ -25,7 +25,7 @@ export class AuthService {
   }
 
   login(username: string, password: string): Observable<any> {
-    return this.http.post(`${this.apiUrl}/auth/login`, { email:username, password:password }).pipe(
+    return this.http.post(`${this.apiUrl}/api/auth/login`, { email:username, password:password }).pipe(
       map((response: any) => {
         // Store user details and jwt token
         this.tokenStorage.saveToken(response.access_token);

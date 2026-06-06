@@ -4,6 +4,8 @@ import { Home } from './home/home';
 import { E404 } from './e404/e404';
 import { AddIssue } from './add-issue/add-issue';
 import { Statistics } from './statistics/statistics';
+import { Map } from './map/map';
+import { IssueView } from './issue-view/issue-view';
 
 export const routes: Routes = [
     {path:'', component: Home,data: { hideNavbar: true }},
@@ -11,6 +13,8 @@ export const routes: Routes = [
     {path:'home', component: Home,data: { hideNavbar: true }},
     {path:'add_issue', component: AddIssue},
     {path:'statistics', component: Statistics},
+    {path:'map', component: Map},
+    {path:'issue/:id', component: IssueView},
 
     {path:'**', component: E404,data: { hideNavbar: true }}
 

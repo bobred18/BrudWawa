@@ -22,7 +22,7 @@ export class Statistics {
   bar:any;
   private http = inject(HttpClient);
   ngOnInit(){
-    this.http.get<any>(`${sessionStorage.getItem("apiURL")}/stats`).subscribe({
+    this.http.get<any>(`${sessionStorage.getItem("apiURL")}/api/stats`).subscribe({
       next: data => {
         this.by_category=data.by_category;
         this.by_status=data.by_status;
