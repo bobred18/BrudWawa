@@ -5,10 +5,7 @@ cd "$(dirname "$0")"
 
 git pull
 
-cd frontend
-npm install
-npm run build
-cd ..
+docker run --rm -v "$(pwd)/frontend:/app" -w /app node:20-alpine sh -c "npm install && npm run build"
 
 docker compose -f docker-compose.prod.yml --env-file .env up -d --build
 
