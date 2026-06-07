@@ -1,0 +1,71 @@
+name: CI
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [dev, main]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    # Run the job itself in a container so the `db` service is reachable by the
+    # hostname `db` — which is what backend/tests/conftest.py hardcodes.
+    container: python:3.12-slim
+    services:
+      db:
+        image: postgis/postgis:16-3.4
+        env:
+          POSTGRES_USER: brudwawa_user
+          POSTGRES_PASSWORD: brudwawa_dev_pass
+          POSTGRES_DB: brudwawa
+        options: >-
+          --health-cmd "pg_isready -U brudwawa_user -d brudwawa"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 10
+    defaults:
+      run:
+        working-directory: backend
+    # Dummy values just to satisfy app.core.config.Settings() at import time.
+    # The tests use their own DB connection (see conftest.py) and never touch
+    # minio/redis/gemini/firebase, so these are throwaway.
+    env:
+      DATABASE_URL: postgresql://brudwawa_user:brudwawa_dev_pass@db:5432/brudwawa
+      REDIS_URL: redis://localhost:6379/0
+      MINIO_ENDPOINT: localhost:9000
+      MINIO_ROOT_USER: minio
+      MINIO_ROOT_PASSWORD: minio12345
+      MINIO_BUCKET: test
+      JWT_SECRET: test-secret
+      GEMINI_API_KEY: test-key
+      FIREBASE_CREDENTIALS_B64: e30=
+    steps:
+      - uses: actions/checkout@v4
+
+      # Build deps mirrored from backend/Dockerfile (gcc + GDAL headers).
+      - name: Install system deps
+        run: |
+          apt-get update
+          apt-get install -y --no-install-recommends gcc libgdal-dev
+          rm -rf /var/lib/apt/lists/*
+
+      - name: Install Python deps
+        run: pip install --no-cache-dir -r requirements.txt
+
+      - name: Run tests
+        run: python -m pytest -v
+
+  lint:
+    runs-on: ubuntu-latest
+    # Non-blocking: surfaces issues but never fails the check / blocks a merge.
+    continue-on-error: true
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install ruff
+        run: pip install ruff
+      - name: Lint
+        run: ruff check backend/
