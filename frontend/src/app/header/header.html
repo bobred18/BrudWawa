@@ -4,6 +4,7 @@
         <a (click)="to_map()">View issues</a>
         <a (click)="to_report()" >Report violation</a>
         <a (click)="to_stats()">Statistics</a>
+        @if(is_admin){<a (click)="to_admin()">Admin</a>}
         <a (click)="log_out()">Log out</a>
     </nav>
 </header>

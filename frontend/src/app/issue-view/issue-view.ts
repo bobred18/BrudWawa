@@ -4,6 +4,7 @@ import { HttpClient } from '@angular/common/http';
 import { NgIf } from '@angular/common';
 import { Router, ActivatedRoute } from '@angular/router';
 import { ChangeDetectorRef } from '@angular/core';
+import { TokenStorageService } from '../core/token-storage';
 
 
 @Component({
@@ -31,6 +32,7 @@ export class IssueView {
     private router: Router,
     private route: ActivatedRoute,
     private changeDetectorRef: ChangeDetectorRef,
+    private tokenService: TokenStorageService,
   ){}
   ngOnInit(){
     this.route.paramMap.subscribe((obs) => {
@@ -42,6 +44,16 @@ export class IssueView {
     next: data => {
 
       this.report=data;
+      switch(data.category){
+          case "smieci": data.category="Illegal trashyard"; break;
+          case "graffiti": data.category="graffiti"; break;
+          case "dziura_w_drodze": data.category="Road damage"; break;
+          case "uszkodzona_infrastruktura": data.category="Damaged infrastruction"; break;
+          case "zanieczyszczenie_wody": data.category="Water pollution"; break;
+          case "zanieczyszczenie_powietrza": data.category="Pollution"; break;
+          case "niebezpieczne_drzewo": data.category="Dangerous foliage"; break;
+          default: data.category=data.category.replace("_"," ");
+        }
       if(this.report.image_key) this.image_path=sessionStorage.getItem("apiURL")+"/api/images/"+this.report.image_key;
       switch(this.report.threat_level){
         case 1: this.danger_color="bg-lime-300";break;
@@ -140,8 +152,7 @@ export class IssueView {
     let content=input.value;
     if(!content) return;
     input.value="";
-    const user=sessionStorage.getItem("auth-user")!;
-    this.comments.push({user_id:JSON.parse(user).sub,content:content});
+    this.comments.push({user_id:this.tokenService.getUser().sub,content:content});
     this.changeDetectorRef.detectChanges();
 
     this.http.post<any>(`${sessionStorage.getItem("apiURL")}/api/reports/${this.report_id}/comments`,{content:content}).subscribe({

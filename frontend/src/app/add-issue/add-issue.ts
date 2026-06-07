@@ -8,6 +8,8 @@ import { GoogleMap } from '@angular/google-maps';
 import { MapMarker } from '@angular/google-maps';
 import { firstValueFrom } from 'rxjs';
 import { ChangeDetectorRef } from '@angular/core';
+import { Router, ActivatedRoute } from '@angular/router';
+
 
 @Component({
   selector: 'app-add-issue',
@@ -37,6 +39,7 @@ export class AddIssue {
   constructor(
     private fb: FormBuilder,
     private changeDetectorRef: ChangeDetectorRef,
+    private router: Router,
   ){
     this.inputForm = this.fb.group({
       title: ['', Validators.required],
@@ -45,6 +48,10 @@ export class AddIssue {
       danger_level: ['',Validators.required],
       institution: ['',Validators.required],
     });
+  }
+  ngOnInit(){
+    if(!sessionStorage.getItem("logged")) this.router.navigate(['/login'], {
+            queryParams: { returnUrl: this.router.url }});
   }
   async ask_clanker(){
     await this.upload_image();
@@ -56,7 +63,7 @@ export class AddIssue {
             this.inputForm.get('title')?.setValue(data.title);
             this.inputForm.get('description')?.setValue(data.description);
             this.inputForm.get('danger_level')?.setValue(data.threat_level);
-            var input =document.getElementById("data.threat_level") as HTMLInputElement;
+            var input =document.getElementById(data.threat_level) as HTMLInputElement;
             input.checked=true;
 //map clanker output onto form values 
             var category=data.category;

@@ -52,7 +52,7 @@ ngOnInit(){
           case "zanieczyszczenie_wody": dat.category="Water pollution"; break;
           case "zanieczyszczenie_powietrza": dat.category="Pollution"; break;
           case "niebezpieczne_drzewo": dat.category="Dangerous foliage"; break;
-          default: dat.category="other";
+          default: dat.category=dat.category.replace("_"," ");
         }
         this.reports.push(dat);
       }
