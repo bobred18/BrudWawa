@@ -5,6 +5,11 @@ cd "$(dirname "$0")"
 
 git pull
 
+cd frontend
+npm install
+npm run build
+cd ..
+
 docker compose -f docker-compose.prod.yml --env-file .env up -d --build
 
 docker compose -f docker-compose.prod.yml exec -T backend alembic upgrade head
