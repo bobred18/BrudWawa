@@ -1,23 +1,15 @@
-import { NgIf } from '@angular/common';
 import { Component } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
-
 @Component({
-  selector: 'app-home',
-  imports: [
-    NgIf
-  ],
-  templateUrl: './home.html',
-  styleUrl: './home.css',
+  selector: 'app-header',
+  imports: [],
+  templateUrl: './header.html',
+  styleUrl: './header.css',
 })
-export class Home {
+export class Header {
   constructor(
     private router: Router
   ){}
-  logged:boolean=false;
-  ngOnInit(){
-    if(sessionStorage.getItem("logged")) this.logged=true;
-  }
   to_stats(){
     this.router.navigate(['/statistics']);
   }
@@ -26,9 +18,6 @@ export class Home {
   }
   to_report(){
     this.router.navigate(['/add_issue']);
-  }
-  to_log(){
-    this.router.navigate(['/login']);
   }
   log_out(){
     this.router.navigate(['/profile'])

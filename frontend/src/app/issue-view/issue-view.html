@@ -1,0 +1,54 @@
+<link rel="stylesheet" href="../../resources/fontello/css/fontello.css">
+
+<div class="w-full sm:w-lg md:w-xl lg:w-3xl xl:w-5xl bg-green-100 text-center p-12 shadow-sm mx-auto  text-lg">
+    <h1 class="text-5xl text-center mb-5">BrudWawa</h1>
+    <main *ngIf="report_ready">
+        <section>
+            <h3 class="text-2xl text-center mb-3">{{report.title}}</h3>
+            <img *ngIf="report.image_key else image_placeholder" [src]="image_path" alt="report photo" class="mx-auto">
+            <ng-template #image_placeholder><div class="w-full h-64 md:h-72 lg:h-80 bg-gray-100"></div></ng-template>
+            <div>
+                <p class="text-justify mt-6">{{report.description}}</p>
+                <div class="grid grid-cols-2 lg:grid-cols-3 mt-6 *:hover:bg-green-700 *:hover:text-amber-300 
+                *:border-2 *:border-amber-700 *:mr-2 *:rounded-full *:py-3">
+                    <p class="bg-green-300 px-1">Category:{{report.category}}</p>
+                    <p [class]="danger_color">Danger level: {{report.threat_level}}</p>
+                    <p class="bg-green-300 px-1 mt-4 lg:mt-0">Institution: {{report.suggested_service}}</p>
+                </div>
+            </div>
+            <div class="lg:flex items-center">
+                <div class="grid grid-cols-2 lg:w-2/3  mt-6 rounded-full border-2 border-amber-700 py-4 md:text-xl bg-cyan-300">
+                    <p>User</p>
+                    <p>{{(report.created_at).substring(0,10)}}</p>
+                    <p>{{user_email}}</p>
+                    <p>{{(report.latitude)?.toFixed(2)}} {{(report.longitude)?.toFixed(2)}}</p>
+                </div>
+                <div class="lg:w-1/3 text-5xl">
+                    <i (click)="vote(1)" class="icon-thumbs-up text-5xl cursor-pointer hover:text-green-700"></i><span>{{score}}</span><i (click)="vote(-1)" class="icon-thumbs-down text-5xl cursor-pointer hover:text-red-600"></i>
+                </div>
+            </div>
+        </section>
+        <section>
+            <h3 class="text-left text-2xl mt-6">Comments</h3>
+            <div class="lg:flex justify-between mt-6">
+                <textarea placeholder="No Ai to help you now" id="comment_add" class="bg-gray-100 p-3 text-base w-full h-40 md:h-30 focus:outline-cyan-200 focus:outline-2"></textarea>
+                <div><button (click)="add_comment();" class="py-3 w-40 ml-4 px-5 hover:bg-green-700 hover:cursor-pointer hover:text-amber-300 transition-colors duration-500 bg-green-300 rounded-full">Add comment</button></div>
+            </div>
+            <article *ngIf="comments_ready" class="mt-10">
+            @for(comment of comments; track $index){
+                @if($index%2==0){
+                    <div class="rounded-full border-2 border-amber-700 mt-4 p-4 bg-cyan-200">
+                        <h4 class="text-green-700 text-xl text-left ">User #{{comment.user_id}}</h4>
+                        <p class="text-left">{{comment.content}}</p>
+                    </div>
+                }@else{
+                    <div class="rounded-full border-2 border-amber-700 mt-4 p-4 bg-green-200">
+                        <h4 class="text-green-700 text-xl text-left ">User #{{comment.user_id}}</h4>
+                        <p class="text-left">{{comment.content}}</p>
+                    </div>
+                }
+            }
+            </article>
+        </section>
+    </main>
+</div>

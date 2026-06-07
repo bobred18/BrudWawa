@@ -1,36 +1,117 @@
-<div class="w-md bg-green-100 text-center p-12 shadow-sm mx-auto mt-20">
-    <h1 class="text-5xl text-center mt-3 mb-10">BrudWawa</h1>
+<div class="w-full sm:w-lg md:w-xl lg:w-3xl xl:w-5xl bg-green-100 text-center p-12 shadow-sm mx-auto text-lg">
+    <h1 class="text-5xl text-center mb-5">BrudWawa</h1>
     <main>
-        <h3 class="text-2xl text-center mt-3 mb-3">Report violation</h3>
+        <h3 class="text-2xl text-center mb-3">Report violation</h3>
 
-        <form [formGroup]="inputForm" (ngSubmit)="file_report()">
-            <div> image</div>
-            <div>image input</div>
-            <button  [disabled]="photo_ready" (click)="ask_clanker()" class="py-3 px-10 my-5 hover:bg-cyan-200 hover:cursor-pointer bg-cyan-300 rounded-full">Analise with AI</button>
+        <form *ngIf="!report_sent else thanks_card" [formGroup]="inputForm" (ngSubmit)="file_report()">
+            <img *ngIf="imageSrc() else image_placeholder" [src]="imageSrc()" [alt]="selectedFile()?.name" class="mx-auto">
+            <ng-template #image_placeholder><div class="w-full h-64 md:h-72 lg:h-80 bg-gray-100"></div></ng-template>
+            <input class="my-2 text-sm" (change)="input_image($event)" type="file" accept="image/*">
+            <button  [disabled]="!photo_ready" (click)="ask_clanker();$event.preventDefault();" class="py-3 px-10 my-5 hover:bg-green-700 hover:cursor-pointer hover:text-amber-300 transition-colors duration-500 bg-green-300 rounded-full">Analyze with AI</button>
+            <div *ngIf="analMessage" class="text-red-600">{{ analMessage }}</div>
             <input placeholder="Title" type="text"  formControlName="title" class="bg-gray-100 p-3 text-base w-full mt-3 focus:outline-cyan-200 focus:outline-2">
-            <div class="text-red-600" *ngIf="loginForm.get('email')?.hasError('email')">Invalid email</div>
-            <textarea placeholder="description" formControlName="description"></textarea>
-            <select formControlName="category">
-                <option value="pollution">Pollution</option>
-                <option value="illegal_trashyard">Illegal trashyard</option>
-                <option value="graffiti">Graffiti</option>
-                <option value="damaged_infrastruction">Damaged Infrastruction</option>
-                <option value="noise">Noise</option>
-                <option value="other">Other</option>
-            </select>
-            <div>danger level</div>
-             <select formControlName="institution">
-                <option value="police">Police</option>
-                <option value="city_inspection">City inspection</option>
-                <option value="firefighters">Firefighters</option>
-                <option value="health_inspection">Health Inspection</option>
-                <option value="road_department">Road department</option>
-                <option value="other">Other</option>
-            </select>
-            <button type="submit" [disabled]="loading" class="py-3 px-10 my-5 hover:bg-cyan-200 hover:cursor-pointer bg-cyan-300 rounded-full">{{form_message}}</button>
+            <textarea placeholder="description" formControlName="description" class="bg-gray-100 p-3 text-base w-full h-60 md:h-40 mt-3 focus:outline-cyan-200 focus:outline-2"></textarea>
+            <div class="flex justify-around items-center">
+                <p class="mr-2 w-50">Select Category: </p>
+                <select formControlName="category" class="bg-gray-100 p-3 text-base w-full mt-3 focus:outline-cyan-200 focus:outline-2">
+                    <option value="Pollution">Air pollution</option>
+                    <option value="Illegal trashyard">Illegal trashyard</option>
+                    <option value="Graffiti">Graffiti</option>
+                    <option value="Road damage">Road Damage</option>
+                    <option value="Zionists">Zionists</option>
+                    <option value="Damaged infrastruction">Damaged Infrastruction</option>
+                    <option value="Water pollution">Water pollution</option>
+                    <option value="Dangerous foliage">Dangerous foliage</option>
+                    <option value="Noise">Noise</option>
+                    <option value="other">Other</option>
+                </select>
+            </div>
+            <div>
+                <p class=" my-3">Danger level</p>
+                <div class="grid grid-cols-5 w-2/3 h-10  bg-gray-100 mx-auto">
+                    <div class="bg-lime-300 flex">
+                        <input type="radio" id="1" name="danger_level" formControlName="danger_level" value="1">
+                        <label for="1">1</label>
+                    </div>
+                    <div class="bg-yellow-300 flex">
+                        <input  type="radio" id="2" name="danger_level" formControlName="danger_level" value="2">
+                        <label for="2">2</label>
+
+                    </div>
+                    <div class="bg-orange-400 flex">
+                        <input  type="radio" id="3" name="danger_level" formControlName="danger_level" value="3">
+                        <label for="3">3</label>
+
+                    </div>
+                    <div class="bg-red-500 flex">
+                        <input  type="radio" id="4" name="danger_level" formControlName="danger_level" value="4">
+                        <label for="4">4</label>
+
+                    </div>
+                    <div class="bg-red-900 flex">
+                        <input  type="radio" id="5" name="danger_level" formControlName="danger_level" value="5">
+                        <label for="5">5</label>
+                    </div>
+                </div>
+            </div>
+            <div class="flex justify-around items-center">
+                <p class="mr-2 w-50">Select service:</p>
+                <select formControlName="institution" class="bg-gray-100 p-3 text-base w-full mt-3 focus:outline-cyan-200 focus:outline-2">
+                    <option value="Police">Police</option>
+                    <option value="City inspection">City inspection</option>
+                    <option value="Firefighters">Firefighters</option>
+                    <option value="Health inspection">Health Inspection</option>
+                    <option value="Road department">Road department</option>
+                    <option value="Water lord">Water lord</option>
+                    <option value="other">Other</option>
+                </select>
+            </div>
+            <button class="py-3 px-10 my-5 hover:bg-green-700 hover:cursor-pointer hover:text-amber-300 transition-colors duration-500 bg-green-300 rounded-full" (click)="mapVisible=true;$event.preventDefault();">
+            Wybierz lokalizację
+            </button>
+
+            <div>
+            <p>Latitude: {{ (latitude)?.toFixed(2) }}</p>
+            <p>Longitude: {{ (longitude)?.toFixed(2) }}</p>
+            </div>
+
+            @if(mapVisible) {
+            <div class="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+
+                <div class="bg-white rounded-lg p-4 w-[90vw] h-[80vh]">
+
+                <div class="flex justify-between items-center mb-3">
+                    <h2 class="text-lg font-bold">
+                    Wybierz lokalizację
+                    </h2>
+
+                    <button
+                    class="py-3 px-5 hover:bg-green-700 hover:cursor-pointer hover:text-amber-300 transition-colors duration-500 bg-green-300 rounded-full"
+                    (click)="mapVisible=false; $event.preventDefault();">
+                    Zamknij
+                    </button>
+                </div>
+
+                <google-map
+                    width="100%"
+                    height="90%"
+                    [center]="center"
+                    [zoom]="zoom"
+                    (mapClick)="mapClick($event)">
+                    <map-marker
+                        [position]="{lat: latitude,lng: longitude}"
+                        
+                    ></map-marker>
+                </google-map>
+
+                </div>
+            </div>
+            }
+            <div *ngIf="errorMessage" class="text-red-600 ">{{ errorMessage }}</div>
+            <button type="submit" [disabled]="loading" class="py-3 px-10 my-10 hover:bg-green-700 hover:cursor-pointer hover:text-amber-300 transition-colors duration-500 bg-green-300 rounded-full">Report violation</button>
             
-            <div *ngIf="errorMessage" class="error">{{ errorMessage }}</div>
         </form>
+        <ng-template #thanks_card><h2 class="text-2xl font-bold text-green-500">Report filled</h2><p class="text-lg pb-60">Thank you for helping to keep the city clean and safe</p></ng-template>
     </main>
 
 </div>

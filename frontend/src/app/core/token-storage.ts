@@ -27,6 +27,7 @@ export class TokenStorageService {
   }
 
   clear(): void {
-    sessionStorage.clear();
+    sessionStorage.removeItem(this.TOKEN_KEY);
+    sessionStorage.removeItem(this.USER_KEY);
   }
 }
