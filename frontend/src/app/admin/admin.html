@@ -1,0 +1,109 @@
+<div
+    class="absolute top-32 left-0 right-0 bottom-0 z-50 bg-[rgb(141,194,111)] backdrop-blur-sm
+           transition-opacity duration-300 pointer-events-none"
+    [class.opacity-100]="!reports_loaded"
+    [class.opacity-0]="reports_loaded">
+</div>
+<div class="w-full sm:w-lg md:w-xl lg:w-3xl xl:w-5xl bg-green-100 text-center p-12 shadow-sm mx-auto text-lg min-h-[calc(100vh-132px)]">
+    <h1 class="text-5xl text-center mt-3 mb-5">BrudWawa</h1>
+    <main>
+        <h3 class="text-2xl text-center  mb-3"> Admin Room</h3>
+        <button (click)="reports=[]; fetch_pending()" class="py-3 px-15 my-4 mr-8 hover:bg-amber-700 hover:cursor-pointer hover:text-red-500 transition-colors duration-500 bg-amber-300 border-2 border-red-500 border-dotted ">  Pending  </button>
+        <button (click)="reports=[]; fetch_all()" class="py-3 px-15 my-4 mr-8 hover:bg-amber-700 hover:cursor-pointer hover:text-red-500 transition-colors duration-500 bg-amber-300 border-2 border-red-500 border-dotted ">All reports</button>
+        @if(reports_loaded){
+        @for(report of reports; track $index){
+            <div>
+                <h4>{{report.title}} : {{report.status}}</h4>
+                <div class="lg:flex align-top justify-between text-justify ">
+                    <div class="w-1/2 mx-auto lg:mr-4 lg:w-1/4"><img *ngIf="report.image_key" [src]="get_image(report)" alt="report photo" ></div>
+                    <div class="lg:w-3/4 ">
+                        <p class="text-base">{{(report.description).substring(0,400)}}</p>
+                        <div class="grid grid-cols-2 lg:grid-cols-3 mt-6 *:hover:bg-green-700 *:hover:text-amber-300 
+                        *:border-2 *:border-amber-700 *:mr-2 *:rounded-full *:py-3 text-center *:transition-colors *:duration-500">
+                            <p class="bg-cyan-200 px-1">{{report.category}}</p>
+                            <p class="bg-cyan-200 px-1">Danger level: {{report.threat_level}}</p>
+                            <p class="bg-cyan-200 px-1 mt-4 lg:mt-0">{{report.suggested_service}}</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="grid grid-cols-2 lg:grid-cols-4 lg:w-2/3 mx-auto">
+                    <button (click)="accept(report)" class="py-3 ml-2  px-2 my-5 hover:bg-green-700 hover:cursor-pointer hover:text-amber-300 transition-colors duration-500 bg-green-300 rounded-full">Accept</button>
+                    <button (click)="reject(report)" class="py-3 ml-2 px-2 my-5 hover:bg-red-600 hover:cursor-pointer hover:text-amber-300 transition-colors duration-500 bg-red-300 rounded-full">Reject</button>
+                    <button (click)="edit(report)" class="py-3 ml-2 px-2 my-5 hover:bg-green-700 hover:cursor-pointer hover:text-amber-300 transition-colors duration-500 bg-green-300 rounded-full">Edit</button>
+                    <button (click)="delete(report)" class="py-3 ml-2 px-2 my-5 hover:bg-red-800 hover:cursor-pointer hover:text-amber-300 transition-colors duration-500 bg-red-500 rounded-full">Delete</button>
+
+                </div>
+            </div>
+        }
+        }
+    </main>
+    @if(edit_visible) {
+    <div class="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+        <div class="w-full sm:w-lg md:w-xl lg:w-3xl xl:w-5xl bg-green-100 text-center p-12 shadow-sm mx-auto text-lg">
+            <form  [formGroup]="inputForm" (ngSubmit)="file_report()">
+                <input placeholder="Title" type="text"  formControlName="title" class="bg-gray-100 p-3 text-base w-full mt-3 focus:outline-cyan-200 focus:outline-2">
+                <textarea placeholder="description" formControlName="description" class="bg-gray-100 p-3 text-base w-full h-60 md:h-40 mt-3 focus:outline-cyan-200 focus:outline-2"></textarea>
+                <div class="flex justify-around items-center">
+                    <p class="mr-2 w-50">Select Category: </p>
+                    <select formControlName="category" class="bg-gray-100 p-3 text-base w-full mt-3 focus:outline-cyan-200 focus:outline-2">
+                        <option value="Pollution">Air pollution</option>
+                        <option value="Illegal trashyard">Illegal trashyard</option>
+                        <option value="Graffiti">Graffiti</option>
+                        <option value="Road damage">Road Damage</option>
+                        <option value="Zionists">Zionists</option>
+                        <option value="Damaged infrastruction">Damaged Infrastruction</option>
+                        <option value="Water pollution">Water pollution</option>
+                        <option value="Dangerous foliage">Dangerous foliage</option>
+                        <option value="Noise">Noise</option>
+                        <option value="other">Other</option>
+                    </select>
+                </div>
+                <div>
+                    <p class=" my-3">Danger level</p>
+                    <div class="grid grid-cols-5 w-2/3 h-10  bg-gray-100 mx-auto">
+                        <div class="bg-lime-300 flex">
+                            <input type="radio" id="1" name="danger_level" formControlName="danger_level" value="1">
+                            <label for="1">1</label>
+                        </div>
+                        <div class="bg-yellow-300 flex">
+                            <input  type="radio" id="2" name="danger_level" formControlName="danger_level" value="2">
+                            <label for="2">2</label>
+
+                        </div>
+                        <div class="bg-orange-400 flex">
+                            <input  type="radio" id="3" name="danger_level" formControlName="danger_level" value="3">
+                            <label for="3">3</label>
+
+                        </div>
+                        <div class="bg-red-500 flex">
+                            <input  type="radio" id="4" name="danger_level" formControlName="danger_level" value="4">
+                            <label for="4">4</label>
+
+                        </div>
+                        <div class="bg-red-900 flex">
+                            <input  type="radio" id="5" name="danger_level" formControlName="danger_level" value="5">
+                            <label for="5">5</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="flex justify-around items-center">
+                    <p class="mr-2 w-50">Select service:</p>
+                    <select formControlName="institution" class="bg-gray-100 p-3 text-base w-full mt-3 focus:outline-cyan-200 focus:outline-2">
+                        <option value="Police">Police</option>
+                        <option value="City inspection">City inspection</option>
+                        <option value="Firefighters">Firefighters</option>
+                        <option value="Health inspection">Health Inspection</option>
+                        <option value="Road department">Road department</option>
+                        <option value="Water lord">Water lord</option>
+                        <option value="other">Other</option>
+                    </select>
+                </div>
+                <div>
+                    <button type="submit" class="py-3 px-10 my-10 mr-8 hover:bg-green-700 hover:cursor-pointer hover:text-amber-300 transition-colors duration-500 bg-green-300 rounded-full">Save</button>
+                    <button (click)="$event.preventDefault(); edit_visible=false" class="py-3 px-10 my-10 hover:bg-red-700 hover:cursor-pointer hover:text-amber-300 transition-colors duration-500 bg-red-300 rounded-full">undo</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    }
+</div>

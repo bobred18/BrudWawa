@@ -23,7 +23,12 @@
                     <span>Log out</span>
                 </div>
             </div>
-           
+            @if(is_admin){
+            <div (click)="to_admin()"  class=" bg-green-200 rounded-2xl mb-2 h-40 content-center text-2xl hover:bg-green-700 hover:text-amber-300 transition-colors duration-500 cursor-pointer">
+                <i class="icon-home text-5xl"></i><br>
+                <span>Admin Room</span>
+            </div>
+            }
         </div>
         <ng-template #log_menu>
             <div (click)="to_stats()" class=" mb-2 h-40  bg-amber-300 rounded-2xl content-center text-2xl hover:bg-amber-700 hover:text-amber-300 transition-colors duration-500 cursor-pointer">
