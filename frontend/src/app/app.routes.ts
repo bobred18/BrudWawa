@@ -6,6 +6,8 @@ import { AddIssue } from './add-issue/add-issue';
 import { Statistics } from './statistics/statistics';
 import { Map } from './map/map';
 import { IssueView } from './issue-view/issue-view';
+import { adminGuard } from './guards/admin-guard';
+import { Admin } from './admin/admin';
 
 export const routes: Routes = [
     {path:'', component: Home,data: { hideNavbar: true }},
@@ -15,6 +17,8 @@ export const routes: Routes = [
     {path:'statistics', component: Statistics},
     {path:'map', component: Map},
     {path:'issue/:id', component: IssueView},
+    {path:'admin', component: Admin, canActivate:[adminGuard]},
+
 
     {path:'**', component: E404,data: { hideNavbar: true }}
 

@@ -10,7 +10,7 @@
             <div>
                 <p class="text-justify mt-6">{{report.description}}</p>
                 <div class="grid grid-cols-2 lg:grid-cols-3 mt-6 *:hover:bg-green-700 *:hover:text-amber-300 
-                *:border-2 *:border-amber-700 *:mr-2 *:rounded-full *:py-3">
+                *:border-2 *:border-amber-700 *:mr-2 *:rounded-full *:py-3 *:transition-colors *:duration-500">
                     <p class="bg-green-300 px-1">Category:{{report.category}}</p>
                     <p [class]="danger_color">Danger level: {{report.threat_level}}</p>
                     <p class="bg-green-300 px-1 mt-4 lg:mt-0">Institution: {{report.suggested_service}}</p>

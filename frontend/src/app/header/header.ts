@@ -1,5 +1,7 @@
 import { Component } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
+import { TokenStorageService } from '../core/token-storage';
+
 @Component({
   selector: 'app-header',
   imports: [],
@@ -8,8 +10,14 @@ import { Router, ActivatedRoute } from '@angular/router';
 })
 export class Header {
   constructor(
-    private router: Router
+    private router: Router,
+    private tokenService: TokenStorageService,
+    
   ){}
+  is_admin=false;
+  ngOnInit(){
+    this.is_admin=this.tokenService.getUser()?.is_admin;
+  }
   to_stats(){
     this.router.navigate(['/statistics']);
   }
@@ -20,6 +28,10 @@ export class Header {
     this.router.navigate(['/add_issue']);
   }
   log_out(){
-    this.router.navigate(['/profile'])
+    this.tokenService.clear();
+    this.router.navigate(['/login'])
+  }
+  to_admin(){
+    this.router.navigate(['/admin']);
   }
 }

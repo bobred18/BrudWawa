@@ -29,5 +29,6 @@ export class TokenStorageService {
   clear(): void {
     sessionStorage.removeItem(this.TOKEN_KEY);
     sessionStorage.removeItem(this.USER_KEY);
+    sessionStorage.removeItem("logged");
   }
 }
