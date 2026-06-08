@@ -1,6 +1,6 @@
 <link rel="stylesheet" href="../../resources/fontello/css/fontello.css">
 
-<div class="w-full sm:w-lg md:w-xl lg:w-3xl xl:w-5xl bg-green-100 text-center p-12 shadow-sm mx-auto  text-lg">
+<div class="w-full sm:w-lg md:w-xl lg:w-3xl xl:w-5xl bg-green-100 text-center py-12 px-2 sm:p-12 shadow-sm mx-auto  text-lg">
     <h1 class="text-5xl text-center mb-5">BrudWawa</h1>
     <main *ngIf="report_ready">
         <section>
@@ -11,13 +11,13 @@
                 <p class="text-justify mt-6">{{report.description}}</p>
                 <div class="grid grid-cols-2 lg:grid-cols-3 mt-6 *:hover:bg-green-700 *:hover:text-amber-300 
                 *:border-2 *:border-amber-700 *:mr-2 *:rounded-full *:py-3 *:transition-colors *:duration-500">
-                    <p class="bg-green-300 px-1">Category:{{report.category}}</p>
-                    <p [class]="danger_color">Danger level: {{report.threat_level}}</p>
-                    <p class="bg-green-300 px-1 mt-4 lg:mt-0">Institution: {{report.suggested_service}}</p>
+                    <p class="bg-green-300 px-1">{{report.category}}</p>
+                    <p [class]="danger_color">Danger: {{report.threat_level}}</p>
+                    <p class="bg-green-300 px-1 mt-4 lg:mt-0">{{report.suggested_service}}</p>
                 </div>
             </div>
             <div class="lg:flex items-center">
-                <div class="grid grid-cols-2 lg:w-2/3  mt-6 rounded-full border-2 border-amber-700 py-4 md:text-xl bg-cyan-300">
+                <div class="sm:grid sm:grid-cols-2 lg:w-2/3  mt-6 rounded-full border-2 border-amber-700 py-4 md:text-xl bg-cyan-300">
                     <p>User</p>
                     <p>{{(report.created_at).substring(0,10)}}</p>
                     <p>{{user_email}}</p>
