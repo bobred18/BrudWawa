@@ -16,16 +16,6 @@ services:
       retries: 5
     restart: unless-stopped
 
-  redis:
-    image: redis:7-alpine
-    container_name: brudwawa_redis
-    healthcheck:
-      test: ["CMD", "redis-cli", "ping"]
-      interval: 10s
-      timeout: 5s
-      retries: 5
-    restart: unless-stopped
-
   minio:
     image: minio/minio:latest
     container_name: brudwawa_minio
@@ -50,7 +40,6 @@ services:
     command: ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000"]
     environment:
       DATABASE_URL: postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@db:5432/${POSTGRES_DB}
-      REDIS_URL: redis://redis:6379
       MINIO_ENDPOINT: minio:9000
       MINIO_ROOT_USER: ${MINIO_ROOT_USER}
       MINIO_ROOT_PASSWORD: ${MINIO_ROOT_PASSWORD}
@@ -62,8 +51,6 @@ services:
       FIREBASE_CREDENTIALS_B64: ${FIREBASE_CREDENTIALS_B64}
     depends_on:
       db:
-        condition: service_healthy
-      redis:
         condition: service_healthy
       minio:
         condition: service_healthy

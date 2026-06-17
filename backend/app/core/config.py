@@ -3,7 +3,6 @@ from pydantic_settings import BaseSettings
 
 class Settings(BaseSettings):
     database_url: str
-    redis_url: str
     minio_endpoint: str
     minio_root_user: str
     minio_root_password: str

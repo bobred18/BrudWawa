@@ -28,10 +28,6 @@ def ensure_bucket():
         client.set_bucket_policy(settings.minio_bucket, policy)
 
 
-def get_public_url(key: str) -> str:
-    return f"http://{settings.minio_endpoint}/{settings.minio_bucket}/{key}"
-
-
 def upload_image(data: bytes, content_type: str) -> str:
     ensure_bucket()
     ext = content_type.split("/")[-1]
@@ -45,10 +41,6 @@ def upload_image(data: bytes, content_type: str) -> str:
         content_type=content_type,
     )
     return key
-
-
-def get_image_url(key: str) -> str:
-    return client.presigned_get_object(settings.minio_bucket, key)
 
 
 def download_image(key: str) -> tuple[bytes, str]:
