@@ -21,7 +21,6 @@ A civic issue-reporting web application for Warsaw. Residents photograph city/en
 | Backend      | FastAPI (Python), SQLAlchemy, Alembic, Pydantic |
 | Database     | PostgreSQL + PostGIS (geospatial) |
 | Storage      | MinIO (S3-compatible) for uploaded images |
-| Cache/PubSub | Redis |
 | AI           | Google Gemini (vision) |
 | Push         | Firebase Admin |
 | Infra        | Docker Compose, Caddy reverse proxy, GitHub Actions CI/CD |
@@ -32,7 +31,6 @@ A civic issue-reporting web application for Warsaw. Residents photograph city/en
 Browser ──► Caddy ──► Angular (static SPA)
                        └──► FastAPI ──► PostgreSQL + PostGIS
                                    ├──► MinIO (images)
-                                   ├──► Redis (cache / pub-sub)
                                    └──► Gemini API (image analysis)
 ```
 

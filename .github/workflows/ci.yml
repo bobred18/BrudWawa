@@ -29,10 +29,9 @@ jobs:
         working-directory: backend
     # Dummy values just to satisfy app.core.config.Settings() at import time.
     # The tests use their own DB connection (see conftest.py) and never touch
-    # minio/redis/gemini/firebase, so these are throwaway.
+    # minio/gemini/firebase, so these are throwaway.
     env:
       DATABASE_URL: postgresql://brudwawa_user:brudwawa_dev_pass@db:5432/brudwawa
-      REDIS_URL: redis://localhost:6379/0
       MINIO_ENDPOINT: localhost:9000
       MINIO_ROOT_USER: minio
       MINIO_ROOT_PASSWORD: minio12345
